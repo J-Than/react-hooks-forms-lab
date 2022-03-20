@@ -5,12 +5,19 @@ import Item from "./Item";
 
 function ShoppingList({ items }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchWord, setSearchWord] = useState("");
 
   function handleCategoryChange(event) {
     setSelectedCategory(event.target.value);
   }
 
-  const itemsToDisplay = items.filter((item) => {
+  function handleSearchChange(event) {
+    setSearchWord(event.target.value)
+  }
+
+  const wordFilteredItems = items.filter((item) => item.name.includes(searchWord))
+
+  const itemsToDisplay = wordFilteredItems.filter((item) => {
     if (selectedCategory === "All") return true;
 
     return item.category === selectedCategory;
@@ -19,7 +26,7 @@ function ShoppingList({ items }) {
   return (
     <div className="ShoppingList">
       <ItemForm />
-      <Filter onCategoryChange={handleCategoryChange} />
+      <Filter onCategoryChange={handleCategoryChange} onSearchChange={handleSearchChange} />
       <ul className="Items">
         {itemsToDisplay.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
